@@ -15,6 +15,25 @@
       --muted: rgba(255, 255, 255, 0.75);
     }
 
+    .sparkle {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold2);
+  opacity: 0.9;
+  filter: drop-shadow(0 0 8px var(--gold));
+  pointer-events: none;
+  z-index: 1;
+  animation: floatUp 6s linear infinite;
+}
+
+@keyframes floatUp {
+  0%   { transform: translateY(40px) scale(0.8); opacity: 0; }
+  10%  { opacity: 1; }
+  100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
+}
+
     * { box-sizing: border-box; }
 
    body {
@@ -281,6 +300,29 @@ Until we meet again.
       video.pause();
       video.currentTime = 0;
     }
+
+    // ===== Sparkles background =====
+function createSparkle() {
+  const s = document.createElement("div");
+  s.className = "sparkle";
+
+  const size = Math.random() * 5 + 3;
+  s.style.width = size + "px";
+  s.style.height = size + "px";
+
+  s.style.left = Math.random() * 100 + "vw";
+  s.style.top = (Math.random() * 20 + 100) + "vh"; // start below screen
+
+  s.style.animationDuration = (Math.random() * 4 + 4) + "s";
+  s.style.opacity = Math.random() * 0.8 + 0.2;
+
+  document.body.appendChild(s);
+
+  setTimeout(() => s.remove(), 9000);
+}
+
+setInterval(createSparkle, 220);
+
   </script>
 
 </body>
