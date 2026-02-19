@@ -143,23 +143,6 @@
       color: rgba(255, 221, 119, 0.95);
     }
 
-    .videoWrap {
-      margin-top: 16px;
-      border-radius: 18px;
-      overflow: hidden;
-      border: 1px solid rgba(212, 175, 55, 0.25);
-      box-shadow: 0 0 25px rgba(212, 175, 55, 0.12);
-      display: none;
-      animation: fadeIn 0.6s ease forwards;
-    }
-
-    video {
-      width: 100%;
-      height: auto;
-      display: block;
-      background: black;
-    }
-
     .tiny {
       margin-top: 16px;
       font-size: 0.85rem;
@@ -170,6 +153,56 @@
     .gold-text {
       color: var(--gold2);
       font-weight: 800;
+    }
+
+    /* ======= VIDEO POPUP MODAL ======= */
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 9999;
+      padding: 20px;
+      animation: fadeIn 0.25s ease forwards;
+    }
+
+    .modalContent {
+      width: 100%;
+      max-width: 900px;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 221, 119, 0.25);
+      background: rgba(10, 10, 14, 0.95);
+      box-shadow: 0 0 50px rgba(212, 175, 55, 0.15);
+      position: relative;
+    }
+
+    .modalVideo {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: black;
+    }
+
+    .closeBtn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      border: none;
+      cursor: pointer;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #111;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      box-shadow: 0 0 18px rgba(212, 175, 55, 0.35);
+    }
+
+    .closeBtn:hover {
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.55);
     }
   </style>
 </head>
@@ -200,14 +233,6 @@ Until we meet again.
         <div class="signature">— Kira 🌙✨</div>
 
         <button class="btnSmall" id="playBtn">Play the video 🎥✨</button>
-
-        <div class="videoWrap" id="videoWrap">
-          <!-- Upload your video into the same GitHub repo and name it: pawee.mp4 -->
-          <video id="farewellVideo" controls muted playsinline preload="metadata">
-            <source src="pawee.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
       </div>
 
       <div class="tiny">
@@ -216,51 +241,80 @@ Until we meet again.
     </div>
   </div>
 
+  <!-- VIDEO POPUP MODAL -->
+  <div class="modal" id="videoModal">
+    <div class="modalContent">
+      <button class="closeBtn" id="closeVideoBtn">Close ✨</button>
+
+      <video id="farewellVideo" class="modalVideo" controls muted playsinline preload="metadata">
+        <source src="pawee.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
+
   <script>
     const toggleBtn = document.getElementById("toggleBtn");
     const letter = document.getElementById("letterBox");
 
     const playBtn = document.getElementById("playBtn");
-    const videoWrap = document.getElementById("videoWrap");
+
+    const modal = document.getElementById("videoModal");
+    const closeVideoBtn = document.getElementById("closeVideoBtn");
     const video = document.getElementById("farewellVideo");
 
     let isOpen = false;
 
+    // Toggle open/close letter
     toggleBtn.addEventListener("click", () => {
       if (!isOpen) {
-        // OPEN
         letter.style.display = "block";
         toggleBtn.innerText = "Close ✨↩️";
         isOpen = true;
         burstSparkles();
       } else {
-        // CLOSE + RESET EVERYTHING
         letter.style.display = "none";
         toggleBtn.innerText = "Touch here ✨💛";
         isOpen = false;
 
-        // Reset video section
-        video.pause();
-        video.currentTime = 0;
-        videoWrap.style.display = "none";
-
-        // Reset play button
-        playBtn.disabled = false;
-        playBtn.innerText = "Play the video 🎥✨";
-        playBtn.style.opacity = "1";
-        playBtn.style.cursor = "pointer";
+        // Close modal if open
+        closeModal();
       }
     });
 
+    // Open modal video
     playBtn.addEventListener("click", () => {
-      videoWrap.style.display = "block";
-      playBtn.innerText = "Playing 🎬✨";
-      playBtn.disabled = true;
-      playBtn.style.opacity = "0.85";
-      playBtn.style.cursor = "default";
+      modal.style.display = "flex";
 
+      // restart video every time
+      video.currentTime = 0;
+
+      // try autoplay (muted helps)
       video.play().catch(() => {});
     });
+
+    // Close modal button
+    closeVideoBtn.addEventListener("click", () => {
+      closeModal();
+    });
+
+    // Close modal if user clicks outside the video box
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    // Auto close when video ends
+    video.addEventListener("ended", () => {
+      closeModal();
+    });
+
+    function closeModal() {
+      modal.style.display = "none";
+      video.pause();
+      video.currentTime = 0;
+    }
 
     // Floating sparkles background
     function createSparkle() {
