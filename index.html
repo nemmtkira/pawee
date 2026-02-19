@@ -15,28 +15,9 @@
       --muted: rgba(255, 255, 255, 0.75);
     }
 
-    .sparkle {
-  position: fixed;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--gold2);
-  opacity: 0.9;
-  filter: drop-shadow(0 0 8px var(--gold));
-  pointer-events: none;
-  z-index: 1;
-  animation: floatUp 6s linear infinite;
-}
-
-@keyframes floatUp {
-  0%   { transform: translateY(40px) scale(0.8); opacity: 0; }
-  10%  { opacity: 1; }
-  100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
-}
-
     * { box-sizing: border-box; }
 
-   body {
+    body {
       margin: 0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       background: radial-gradient(circle at top, #12121a, var(--bg));
@@ -44,12 +25,12 @@
       min-height: 100vh;
 
       display: flex;
-      align-items: flex-start;   /* 👈 move up */
+      align-items: flex-start;   /* move up */
       justify-content: center;
 
       overflow-x: hidden;
-      padding: 40px 24px 24px;   /* 👈 top padding */
-}
+      padding: 40px 24px 24px;
+    }
 
     .container {
       width: 100%;
@@ -82,6 +63,11 @@
       text-align: center;
     }
 
+    .gold-text {
+      color: var(--gold2);
+      font-weight: 800;
+    }
+
     .btn {
       width: 100%;
       padding: 14px 18px;
@@ -89,7 +75,7 @@
       border-radius: 16px;
       cursor: pointer;
       font-size: 1rem;
-      font-weight: 700;
+      font-weight: 800;
       color: #111;
       background: linear-gradient(135deg, var(--gold), var(--gold2));
       box-shadow: 0 0 18px rgba(212, 175, 55, 0.35);
@@ -109,7 +95,7 @@
       border-radius: 16px;
       cursor: pointer;
       font-size: 0.95rem;
-      font-weight: 700;
+      font-weight: 800;
       color: rgba(255, 255, 255, 0.92);
       background: rgba(0, 0, 0, 0.35);
       box-shadow: 0 0 18px rgba(212, 175, 55, 0.10);
@@ -142,7 +128,7 @@
 
     .signature {
       margin-top: 16px;
-      font-weight: 800;
+      font-weight: 900;
       color: rgba(255, 221, 119, 0.95);
     }
 
@@ -151,11 +137,6 @@
       font-size: 0.85rem;
       color: rgba(255, 255, 255, 0.55);
       text-align: center;
-    }
-
-    .gold-text {
-      color: var(--gold2);
-      font-weight: 800;
     }
 
     /* ===== VIDEO MODAL ===== */
@@ -200,12 +181,36 @@
       cursor: pointer;
       padding: 10px 14px;
       border-radius: 999px;
-      font-weight: 800;
+      font-weight: 900;
       font-size: 0.95rem;
       color: #111;
       background: linear-gradient(135deg, var(--gold), var(--gold2));
       box-shadow: 0 0 18px rgba(212, 175, 55, 0.35);
       z-index: 10;
+    }
+
+    .closeBtn:hover {
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.55);
+    }
+
+    /* ===== SPARKLES BACKGROUND ===== */
+    .sparkle {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold2);
+      opacity: 0.9;
+      filter: drop-shadow(0 0 8px var(--gold));
+      pointer-events: none;
+      z-index: 1;
+      animation: floatUp 6s linear infinite;
+    }
+
+    @keyframes floatUp {
+      0%   { transform: translateY(40px) scale(0.8); opacity: 0; }
+      10%  { opacity: 1; }
+      100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
     }
   </style>
 </head>
@@ -215,9 +220,7 @@
   <div class="container">
     <div class="card">
       <h1 class="title">✨ A small wish for <span class="gold-text">Pawee</span> 💛</h1>
-      <p class="subtitle">
-        Tap below to open the letter 💌
-      </p>
+      <p class="subtitle">Tap below to open the letter 💌</p>
 
       <button class="btn" id="toggleBtn">Touch here ✨💛</button>
 
@@ -235,12 +238,11 @@ Until we meet again.
 
         <button class="btnSmall" id="playBtn">Play the video 🎥✨</button>
       </div>
-
       
     </div>
   </div>
 
-  <!-- MODAL -->
+  <!-- VIDEO MODAL -->
   <div class="modal" id="videoModal">
     <div class="modalContent">
       <button class="closeBtn" id="closeVideoBtn">Close ✨</button>
@@ -302,27 +304,26 @@ Until we meet again.
     }
 
     // ===== Sparkles background =====
-function createSparkle() {
-  const s = document.createElement("div");
-  s.className = "sparkle";
+    function createSparkle() {
+      const s = document.createElement("div");
+      s.className = "sparkle";
 
-  const size = Math.random() * 5 + 3;
-  s.style.width = size + "px";
-  s.style.height = size + "px";
+      const size = Math.random() * 5 + 3;
+      s.style.width = size + "px";
+      s.style.height = size + "px";
 
-  s.style.left = Math.random() * 100 + "vw";
-  s.style.top = (Math.random() * 20 + 100) + "vh"; // start below screen
+      s.style.left = Math.random() * 100 + "vw";
+      s.style.top = (Math.random() * 20 + 100) + "vh";
 
-  s.style.animationDuration = (Math.random() * 4 + 4) + "s";
-  s.style.opacity = Math.random() * 0.8 + 0.2;
+      s.style.animationDuration = (Math.random() * 4 + 4) + "s";
+      s.style.opacity = Math.random() * 0.8 + 0.2;
 
-  document.body.appendChild(s);
+      document.body.appendChild(s);
 
-  setTimeout(() => s.remove(), 9000);
-}
+      setTimeout(() => s.remove(), 9000);
+    }
 
-setInterval(createSparkle, 220);
-
+    setInterval(createSparkle, 220);
   </script>
 
 </body>
