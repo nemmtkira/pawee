@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For Pawee ✨</title>
+
+  <style>
+    :root {
+      --bg: #0b0b0f;
+      --card: rgba(255, 255, 255, 0.06);
+      --gold: #d4af37;
+      --gold2: #ffdd77;
+      --text: #f5f5f5;
+      --muted: rgba(255, 255, 255, 0.75);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(circle at top, #12121a, var(--bg));
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 24px;
+    }
+
+    /* Sparkles */
+    .sparkle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold2);
+      opacity: 0.9;
+      filter: drop-shadow(0 0 8px var(--gold));
+      animation: floatUp 6s linear infinite;
+    }
+
+    @keyframes floatUp {
+      0%   { transform: translateY(30px) scale(0.8); opacity: 0; }
+      10%  { opacity: 1; }
+      100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
+    }
+
+    .container {
+      width: 100%;
+      max-width: 760px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 22px;
+      padding: 26px;
+      box-shadow: 0 0 40px rgba(212, 175, 55, 0.08);
+      backdrop-filter: blur(10px);
+    }
+
+    .title {
+      font-size: 1.6rem;
+      margin: 0 0 6px;
+      letter-spacing: 0.4px;
+    }
+
+    .subtitle {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px 18px;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #111;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      box-shadow: 0 0 18px rgba(212, 175, 55, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 26px rgba(212, 175, 55, 0.55);
+    }
+
+    .letter {
+      margin-top: 18px;
+      padding: 20px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 221, 119, 0.25);
+      background: rgba(0, 0, 0, 0.35);
+      display: none;
+      animation: fadeIn 0.6s ease forwards;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.92);
+      white-space: pre-line;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .signature {
+      margin-top: 16px;
+      font-weight: 700;
+      color: rgba(255, 221, 119, 0.95);
+    }
+
+    .videoWrap {
+      margin-top: 18px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.12);
+    }
+
+    video {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: black;
+    }
+
+    .tiny {
+      margin-top: 16px;
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.55);
+      text-align: center;
+    }
+
+    .gold-text {
+      color: var(--gold2);
+      font-weight: 800;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="card">
+      <h1 class="title">✨ A small wish for <span class="gold-text">Pawee</span> 💛</h1>
+      <p class="subtitle">
+        Tap the button below to open the letter 💌  
+        (Made with golden sparkles ✨)
+      </p>
+
+      <button class="btn" id="openBtn">Touch here ✨💛</button>
+
+      <div class="letter" id="letterBox">
+Hi Pawee,
+Just a simple wish before you leave.
+
+I hope you find the path that matches your dream and succeed in everything you’re chasing. Wishing you a meaningful life ahead, full of happiness, good health, and new opportunities. You’ll be missed here — good luck with your next chapter!
+
+Thank you for your support from the beginning and for all the good moments we shared in the office.
+
+Until we meet again.
+
+        <div class="signature">— Kira 🌙✨</div>
+
+        <div class="videoWrap">
+          <!-- Upload your video into the same GitHub repo and name it: pawee.mp4 -->
+          <video controls muted playsinline preload="metadata">
+            <source src="pawee.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+
+      <div class="tiny">⭐ Tip: If the video doesn’t load, check the file name: <b>pawee.mp4</b></div>
+    </div>
+  </div>
+
+  <script>
+    const btn = document.getElementById("openBtn");
+    const letter = document.getElementById("letterBox");
+
+    btn.addEventListener("click", () => {
+      letter.style.display = "block";
+      btn.innerText = "Opened 💌✨";
+      btn.disabled = true;
+      btn.style.opacity = "0.85";
+      btn.style.cursor = "default";
+      burstSparkles();
+    });
+
+    // Floating sparkles background
+    function createSparkle() {
+      const s = document.createElement("div");
+      s.className = "sparkle";
+      const size = Math.random() * 5 + 3;
+      s.style.width = size + "px";
+      s.style.height = size + "px";
+      s.style.left = Math.random() * 100 + "vw";
+      s.style.top = (Math.random() * 120 + 100) + "vh";
+      s.style.animationDuration = (Math.random() * 4 + 4) + "s";
+      s.style.opacity = Math.random() * 0.8 + 0.2;
+      document.body.appendChild(s);
+
+      setTimeout(() => s.remove(), 9000);
+    }
+
+    setInterval(createSparkle, 250);
+
+    // Sparkle burst when opened
+    function burstSparkles() {
+      for (let i = 0; i < 25; i++) {
+        const s = document.createElement("div");
+        s.className = "sparkle";
+        const size = Math.random() * 6 + 4;
+        s.style.width = size + "px";
+        s.style.height = size + "px";
+
+        const rect = btn.getBoundingClientRect();
+        s.style.left = rect.left + rect.width / 2 + (Math.random() * 140 - 70) + "px";
+        s.style.top = rect.top + rect.height / 2 + (Math.random() * 80 - 40) + "px";
+
+        s.style.animationDuration = (Math.random() * 1.5 + 2) + "s";
+        document.body.appendChild(s);
+
+        setTimeout(() => s.remove(), 3500);
+      }
+    }
+  </script>
+
+</body>
+</html>
