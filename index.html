@@ -30,24 +30,6 @@
       padding: 24px;
     }
 
-    /* Sparkles */
-    .sparkle {
-      position: absolute;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--gold2);
-      opacity: 0.9;
-      filter: drop-shadow(0 0 8px var(--gold));
-      animation: floatUp 6s linear infinite;
-    }
-
-    @keyframes floatUp {
-      0%   { transform: translateY(30px) scale(0.8); opacity: 0; }
-      10%  { opacity: 1; }
-      100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
-    }
-
     .container {
       width: 100%;
       max-width: 760px;
@@ -155,7 +137,7 @@
       font-weight: 800;
     }
 
-    /* ======= VIDEO POPUP MODAL ======= */
+    /* ===== VIDEO MODAL ===== */
     .modal {
       position: fixed;
       inset: 0;
@@ -165,7 +147,10 @@
       background: rgba(0, 0, 0, 0.75);
       z-index: 9999;
       padding: 20px;
-      animation: fadeIn 0.25s ease forwards;
+    }
+
+    .modal.show {
+      display: flex;
     }
 
     .modalContent {
@@ -199,10 +184,7 @@
       color: #111;
       background: linear-gradient(135deg, var(--gold), var(--gold2));
       box-shadow: 0 0 18px rgba(212, 175, 55, 0.35);
-    }
-
-    .closeBtn:hover {
-      box-shadow: 0 0 25px rgba(212, 175, 55, 0.55);
+      z-index: 10;
     }
   </style>
 </head>
@@ -213,11 +195,9 @@
     <div class="card">
       <h1 class="title">✨ A small wish for <span class="gold-text">Pawee</span> 💛</h1>
       <p class="subtitle">
-        Tap the button below to open the letter 💌  
-        (Made with golden sparkles ✨)
+        Tap below to open the letter 💌
       </p>
 
-      <!-- SAME BUTTON toggles open/close -->
       <button class="btn" id="toggleBtn">Touch here ✨💛</button>
 
       <div class="letter" id="letterBox">
@@ -236,18 +216,18 @@ Until we meet again.
       </div>
 
       <div class="tiny">
-        ⭐ Video file must be named <b>pawee.mp4</b> and uploaded next to <b>index.html</b>
+        Video must be named <b>pawee.mp4</b> and uploaded next to <b>index.html</b>
       </div>
     </div>
   </div>
 
-  <!-- VIDEO POPUP MODAL -->
+  <!-- MODAL -->
   <div class="modal" id="videoModal">
     <div class="modalContent">
       <button class="closeBtn" id="closeVideoBtn">Close ✨</button>
 
       <video id="farewellVideo" class="modalVideo" controls muted playsinline preload="metadata">
-        <source src="pawee.mp4" type="video/mp4" />
+        <source src="./pawee.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
     </div>
@@ -258,100 +238,48 @@ Until we meet again.
     const letter = document.getElementById("letterBox");
 
     const playBtn = document.getElementById("playBtn");
-
     const modal = document.getElementById("videoModal");
     const closeVideoBtn = document.getElementById("closeVideoBtn");
     const video = document.getElementById("farewellVideo");
 
     let isOpen = false;
 
-    // Toggle open/close letter
+    // Open/close letter
     toggleBtn.addEventListener("click", () => {
-      if (!isOpen) {
+      isOpen = !isOpen;
+
+      if (isOpen) {
         letter.style.display = "block";
         toggleBtn.innerText = "Close ✨↩️";
-        isOpen = true;
-        burstSparkles();
       } else {
         letter.style.display = "none";
         toggleBtn.innerText = "Touch here ✨💛";
-        isOpen = false;
-
-        // Close modal if open
         closeModal();
       }
     });
 
     // Open modal video
     playBtn.addEventListener("click", () => {
-      modal.style.display = "flex";
-
-      // restart video every time
+      modal.classList.add("show");
       video.currentTime = 0;
-
-      // try autoplay (muted helps)
       video.play().catch(() => {});
     });
 
-    // Close modal button
-    closeVideoBtn.addEventListener("click", () => {
-      closeModal();
-    });
+    // Close modal
+    closeVideoBtn.addEventListener("click", closeModal);
 
-    // Close modal if user clicks outside the video box
+    // Click outside closes modal
     modal.addEventListener("click", (e) => {
-      if (e.target === modal) {
-        closeModal();
-      }
+      if (e.target === modal) closeModal();
     });
 
     // Auto close when video ends
-    video.addEventListener("ended", () => {
-      closeModal();
-    });
+    video.addEventListener("ended", closeModal);
 
     function closeModal() {
-      modal.style.display = "none";
+      modal.classList.remove("show");
       video.pause();
       video.currentTime = 0;
-    }
-
-    // Floating sparkles background
-    function createSparkle() {
-      const s = document.createElement("div");
-      s.className = "sparkle";
-      const size = Math.random() * 5 + 3;
-      s.style.width = size + "px";
-      s.style.height = size + "px";
-      s.style.left = Math.random() * 100 + "vw";
-      s.style.top = (Math.random() * 120 + 100) + "vh";
-      s.style.animationDuration = (Math.random() * 4 + 4) + "s";
-      s.style.opacity = Math.random() * 0.8 + 0.2;
-      document.body.appendChild(s);
-
-      setTimeout(() => s.remove(), 9000);
-    }
-
-    setInterval(createSparkle, 250);
-
-    // Sparkle burst when opened
-    function burstSparkles() {
-      for (let i = 0; i < 25; i++) {
-        const s = document.createElement("div");
-        s.className = "sparkle";
-        const size = Math.random() * 6 + 4;
-        s.style.width = size + "px";
-        s.style.height = size + "px";
-
-        const rect = toggleBtn.getBoundingClientRect();
-        s.style.left = rect.left + rect.width / 2 + (Math.random() * 140 - 70) + "px";
-        s.style.top = rect.top + rect.height / 2 + (Math.random() * 80 - 40) + "px";
-
-        s.style.animationDuration = (Math.random() * 1.5 + 2) + "s";
-        document.body.appendChild(s);
-
-        setTimeout(() => s.remove(), 3500);
-      }
     }
   </script>
 
